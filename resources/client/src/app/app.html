@@ -1,1 +1,32 @@
-<router-outlet />
+<mat-sidenav-container class="sidenav-container">
+    <!-- Navigation Menu -->
+    <mat-sidenav #mainnav mode="side" class="mainnav">
+        <mat-toolbar>
+            <span>Menu</span>
+        </mat-toolbar>
+
+        <mat-nav-list role="list">
+            <mat-list-item>
+                <mat-icon matListItemIcon>home</mat-icon>
+                <a matListItemTitle routerLink="/home">Home</a>
+            </mat-list-item>
+            <mat-list-item>
+                <mat-icon matListItemIcon>dashboard</mat-icon>
+                <a matListItemTitle routerLink="/venue">Venues</a>
+            </mat-list-item>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <!-- Toolbar | Router Outlet -->
+    <section>
+        <!-- Toolbar -->
+        <mat-toolbar>
+            <button mat-mini-fab (click)="mainnav.toggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+        </mat-toolbar>
+
+        <!-- Router Outlet -->
+        <router-outlet></router-outlet>
+    </section>
+</mat-sidenav-container>

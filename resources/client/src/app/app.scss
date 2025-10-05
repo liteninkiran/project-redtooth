@@ -1,0 +1,24 @@
+.sidenav-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.toolbar-title {
+    margin-left: 1rem;
+}
+
+.mainnav {
+    width: 300px;
+}
+
+a[matListItemTitle] {
+    text-decoration: none;
+}
+
+section mat-toolbar {
+    background-color: var(--mdc-theme-primary);
+    color: var(--mdc-theme-on-primary);
+}
