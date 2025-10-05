@@ -1,9 +1,28 @@
+@use '@angular/material' as mat;
+
+.toolbar {
+    @include mat.toolbar-overrides(
+        (
+            container-background-color: var(--mat-sys-primary),
+            container-text-color: var(--mat-sys-on-primary),
+        )
+    );
+}
+
 .sidenav-container {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+
+    mat-sidenav {
+        @include mat.sidenav-overrides(
+            (
+                container-shape: 0px,
+            )
+        );
+    }
 }
 
 .toolbar-title {
@@ -16,9 +35,4 @@
 
 a[matListItemTitle] {
     text-decoration: none;
-}
-
-section mat-toolbar {
-    background-color: var(--mdc-theme-primary);
-    color: var(--mdc-theme-on-primary);
 }

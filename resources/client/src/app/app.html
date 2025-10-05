@@ -1,7 +1,7 @@
 <mat-sidenav-container class="sidenav-container">
     <!-- Navigation Menu -->
-    <mat-sidenav #mainnav mode="side" class="mainnav">
-        <mat-toolbar>
+    <mat-sidenav #mainnav mode="side" class="mainnav" opened>
+        <mat-toolbar class="toolbar">
             <span>Menu</span>
         </mat-toolbar>
 
@@ -20,7 +20,7 @@
     <!-- Toolbar | Router Outlet -->
     <section>
         <!-- Toolbar -->
-        <mat-toolbar>
+        <mat-toolbar class="toolbar">
             <button mat-mini-fab (click)="mainnav.toggle()">
                 <mat-icon>menu</mat-icon>
             </button>
