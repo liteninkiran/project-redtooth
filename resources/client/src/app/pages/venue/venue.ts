@@ -8,7 +8,6 @@ import type {
     GridApi,
     GridOptions,
     GridReadyEvent,
-    IServerSideDatasource,
     IServerSideGetRowsParams,
 } from 'ag-grid-community';
 import { MatButtonModule } from '@angular/material/button';
