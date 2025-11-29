@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Venue;
+use Database\Factories\VenueFactory;
 
 class VenueSeeder extends Seeder
 {
@@ -12,7 +13,6 @@ class VenueSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create 50 venues
-        Venue::factory()->count(50)->create();
+        Venue::factory()->createMany(VenueFactory::$staticVenues);
     }
 }

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer('venueid');
             $table->string('venuename');
-            $table->decimal('lat', total: 20, places: 15);
-            $table->decimal('lng', total: 20, places: 15);
+            $table->decimal('lat', total: 13, places: 10);
+            $table->decimal('longi', total: 13, places: 10);
             $table->integer('active');
             $table->string('venueaddress1');
             $table->string('venueaddress2');
@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('venuetelno');
             $table->string('landlordtitle');
             $table->integer('imageapproval');
+            $table->decimal('distance_miles', total: 13, places: 10);
             $table->string('venue_status_id');
             $table->text('map_html');
             $table->timestamps();
