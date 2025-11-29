@@ -31,5 +31,14 @@ class Venue extends Model
         'map_html',
     ];
 
+    protected $casts = [
+        'lat' => 'float',
+        'longi' => 'float',
+        'distance_miles' => 'float',
+        'active' => 'integer',
+        'imageapproval' => 'integer',
+        'venueid' => 'integer',
+    ];
+
     public $incrementing = true;
 }
