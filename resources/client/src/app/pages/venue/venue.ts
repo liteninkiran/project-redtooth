@@ -115,7 +115,7 @@ export class Venue {
         });
     }
 
-    public onGridReady(params: GridReadyEvent<VenueResponse>) {
+    public onGridReady(params: GridReadyEvent<VenueResponse>): void {
         this.gridApi = params.api;
 
         const getRows = (getRowsParams: IServerSideGetRowsParams) => {
@@ -133,7 +133,6 @@ export class Venue {
                 rowCount: response.lastRow,
             });
             const next = (response: VenueResponse) => getRowsParams.success(getResponse(response));
-
             const error = () => getRowsParams.fail();
             $venues.subscribe({ next, error });
         };
