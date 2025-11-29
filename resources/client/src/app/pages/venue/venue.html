@@ -1,3 +1,8 @@
 <h1>Venues</h1>
 
-<ag-grid-angular [rowData]="venues$ | async" [columnDefs]="colDefs" [animateRows]="true" />
+<ag-grid-angular
+    [rowData]="venues$ | async"
+    [columnDefs]="colDefs"
+    [animateRows]="true"
+    [sideBar]="sideBar"
+/>
