@@ -162,17 +162,11 @@ export class Venue {
 
     public onColumnSelectionChange(event: any): void {
         const selectedFields = event.value as string[];
-
-        // Show/hide columns based on dropdown selection
         this.colDefs = this.colDefs.map((col) => ({
             ...col,
             hide: !selectedFields.includes(col.field ?? ''),
         }));
-
-        // Force refresh column definitions in the grid
         this.gridApi.setGridOption('columnDefs', this.colDefs);
-
-        // Optional: auto-fit columns afterwards
         this.autoFitColumns();
     }
 }
