@@ -6,14 +6,18 @@
         </mat-toolbar>
 
         <mat-nav-list role="list">
-            <mat-list-item>
-                <mat-icon matListItemIcon>home</mat-icon>
-                <a matListItemTitle routerLink="/home">Home</a>
-            </mat-list-item>
-            <mat-list-item>
-                <mat-icon matListItemIcon>dashboard</mat-icon>
-                <a matListItemTitle routerLink="/venue">Venues</a>
-            </mat-list-item>
+            <a matListItemTitle routerLink="/home">
+                <mat-list-item>
+                    <mat-icon matListItemIcon>home</mat-icon>
+                    Home
+                </mat-list-item>
+            </a>
+            <a matListItemTitle routerLink="/venue">
+                <mat-list-item>
+                    <mat-icon matListItemIcon>dashboard</mat-icon>
+                    Venues
+                </mat-list-item>
+            </a>
         </mat-nav-list>
     </mat-sidenav>
 
