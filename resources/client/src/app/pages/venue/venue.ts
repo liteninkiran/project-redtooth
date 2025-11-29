@@ -2,12 +2,22 @@ import { Component, inject } from '@angular/core';
 import { VenueService } from '../../services/venue.service';
 import { CommonModule } from '@angular/common';
 import { AgGridAngular } from 'ag-grid-angular';
-import type { ColDef } from 'ag-grid-community';
+import type {
+    AutoSizeStrategy,
+    ColDef,
+    GridApi,
+    GridReadyEvent,
+    ISizeColumnsToFitParams,
+} from 'ag-grid-community';
+import { MatButtonModule } from '@angular/material/button';
 
-interface ColumnConfig {
+type ColumnConfig = {
     field: string;
     header?: string;
-}
+};
+
+type ColumnLimits = { field: string; maxWidth: number };
+
 const visibleColumns = ['venuename', 'venuetown', 'gamenight', 'venuetelno', 'distance_miles'];
 const allColumns: ColumnConfig[] = [
     { field: 'id', header: 'ID' },
@@ -35,7 +45,7 @@ const allColumns: ColumnConfig[] = [
     { field: 'updated_at', header: 'Updated At' },
 ];
 
-const mapFn = (col: ColumnConfig) => ({
+const colDefMapFn = (col: ColumnConfig) => ({
     field: col.field,
     headerName: col.header || col.field,
     hide: !visibleColumns.includes(col.field),
@@ -44,16 +54,21 @@ const mapFn = (col: ColumnConfig) => ({
     resizable: true,
 });
 
+const mapFn1 = (c: ColumnLimits) => ({ colId: c.field, maxWidth: c.maxWidth });
+const mapFn2 = (c: ColumnLimits) => ({ key: c.field, maxWidth: c.maxWidth });
+const columnLimits: ColumnLimits[] = [{ field: 'map_html', maxWidth: 900 }];
+const defaultMinWidth = 100;
+
 @Component({
     selector: 'app-venue',
-    imports: [CommonModule, AgGridAngular],
+    imports: [CommonModule, AgGridAngular, MatButtonModule],
     templateUrl: './venue.html',
     styleUrl: './venue.scss',
 })
 export class Venue {
     private venueService = inject(VenueService);
     public venues$ = this.venueService.getVenues();
-    public colDefs: ColDef[] = allColumns.map(mapFn);
+    public colDefs: ColDef[] = allColumns.map(colDefMapFn);
     public sideBar = {
         toolPanels: [
             {
@@ -72,4 +87,21 @@ export class Venue {
         ],
         defaultToolPanel: '',
     };
+    public autoSizeStrategy: AutoSizeStrategy = {
+        type: 'fitGridWidth',
+        defaultMinWidth,
+        columnLimits: columnLimits.map(mapFn1),
+    };
+    private gridApi!: GridApi<Venue[]>;
+
+    public autoFitColumns(): void {
+        this.gridApi.sizeColumnsToFit({
+            defaultMinWidth,
+            columnLimits: columnLimits.map(mapFn2),
+        });
+    }
+
+    public onGridReady(params: GridReadyEvent<Venue[]>) {
+        this.gridApi = params.api;
+    }
 }

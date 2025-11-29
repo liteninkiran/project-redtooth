@@ -5,4 +5,8 @@
     [columnDefs]="colDefs"
     [animateRows]="true"
     [sideBar]="sideBar"
+    [autoSizeStrategy]="autoSizeStrategy"
+    (gridReady)="onGridReady($event)"
 />
+
+<button matButton="filled" (click)="autoFitColumns()">Auto-fit Columns</button>
