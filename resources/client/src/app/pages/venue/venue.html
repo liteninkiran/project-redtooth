@@ -7,6 +7,8 @@
     [sideBar]="sideBar"
     [autoSizeStrategy]="autoSizeStrategy"
     (gridReady)="onGridReady($event)"
+    (columnVisible)="onColumnVisible($event)"
 />
 
 <button matButton="filled" (click)="autoFitColumns()">Auto-fit Columns</button>
+<button matButton="filled" (click)="showAllColumns()">Show All Columns</button>

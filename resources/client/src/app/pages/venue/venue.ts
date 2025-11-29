@@ -57,7 +57,7 @@ const colDefMapFn = (col: ColumnConfig) => ({
 const mapFn1 = (c: ColumnLimits) => ({ colId: c.field, maxWidth: c.maxWidth });
 const mapFn2 = (c: ColumnLimits) => ({ key: c.field, maxWidth: c.maxWidth });
 const columnLimits: ColumnLimits[] = [{ field: 'map_html', maxWidth: 900 }];
-const defaultMinWidth = 100;
+const defaultMinWidth = 50;
 
 @Component({
     selector: 'app-venue',
@@ -103,5 +103,13 @@ export class Venue {
 
     public onGridReady(params: GridReadyEvent<Venue[]>) {
         this.gridApi = params.api;
+    }
+
+    public showAllColumns(): void {
+        this.colDefs = this.colDefs.map((col) => ({ ...col, hide: false }));
+    }
+
+    public onColumnVisible(event: any): void {
+        this.autoFitColumns();
     }
 }
