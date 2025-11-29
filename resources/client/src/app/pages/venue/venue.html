@@ -1,11 +1,13 @@
 <h1>Venues</h1>
 
 <ag-grid-angular
-    [rowData]="venues$ | async"
     [columnDefs]="colDefs"
     [animateRows]="true"
     [sideBar]="sideBar"
     [autoSizeStrategy]="autoSizeStrategy"
+    [rowModelType]="'serverSide'"
+    [gridOptions]="gridOptions"
+    [paginationPageSizeSelector]="[5, 10, 20, 50]"
     (gridReady)="onGridReady($event)"
     (columnVisible)="onColumnVisible($event)"
 />

@@ -1,4 +1,4 @@
-export interface Venue {
+export type Venue = {
     id: number;
     venueid: number;
     venuename: string;
@@ -22,4 +22,9 @@ export interface Venue {
     map_html: string;
     created_at: string;
     updated_at: string;
-}
+};
+
+export type VenueResponse = {
+    rows: Venue[];
+    lastRow: number;
+};

@@ -1,22 +1,31 @@
 import { Component, inject } from '@angular/core';
-import { VenueService } from '../../services/venue.service';
+import { Options, VenueService } from '../../services/venue.service';
 import { CommonModule } from '@angular/common';
 import { AgGridAngular } from 'ag-grid-angular';
 import type {
     AutoSizeStrategy,
     ColDef,
     GridApi,
+    GridOptions,
     GridReadyEvent,
-    ISizeColumnsToFitParams,
+    IServerSideDatasource,
+    IServerSideGetRowsParams,
 } from 'ag-grid-community';
 import { MatButtonModule } from '@angular/material/button';
+import { VenueResponse } from '../../interfaces/venue';
 
 type ColumnConfig = {
     field: string;
     header?: string;
 };
 
-type ColumnLimits = { field: string; maxWidth: number };
+type ColumnLimits = {
+    field: string;
+    maxWidth: number;
+};
+
+const paginationPageSize = 5;
+const cacheBlockSize = 5;
 
 const visibleColumns = ['venuename', 'venuetown', 'gamenight', 'venuetelno', 'distance_miles'];
 const allColumns: ColumnConfig[] = [
@@ -67,7 +76,6 @@ const defaultMinWidth = 50;
 })
 export class Venue {
     private venueService = inject(VenueService);
-    public venues$ = this.venueService.getVenues();
     public colDefs: ColDef[] = allColumns.map(colDefMapFn);
     public sideBar = {
         toolPanels: [
@@ -92,7 +100,14 @@ export class Venue {
         defaultMinWidth,
         columnLimits: columnLimits.map(mapFn1),
     };
-    private gridApi!: GridApi<Venue[]>;
+    private gridApi!: GridApi<VenueResponse>;
+    public gridOptions: GridOptions = {
+        rowModelType: 'serverSide',
+        pagination: true,
+        paginationPageSize,
+        cacheBlockSize,
+        animateRows: true,
+    };
 
     public autoFitColumns(): void {
         this.gridApi.sizeColumnsToFit({
@@ -101,8 +116,30 @@ export class Venue {
         });
     }
 
-    public onGridReady(params: GridReadyEvent<Venue[]>) {
+    public onGridReady(params: GridReadyEvent<VenueResponse>) {
         this.gridApi = params.api;
+
+        const getRows = (getRowsParams: IServerSideGetRowsParams) => {
+            const { startRow, endRow, sortModel, filterModel } = getRowsParams.request;
+            const options: Options = {
+                startRow: startRow ?? 0,
+                endRow: endRow ?? paginationPageSize,
+                sortModel,
+                filterModel,
+                pageSize: paginationPageSize,
+            };
+            const $venues = this.venueService.getVenues(options);
+            const getResponse = (response: VenueResponse) => ({
+                rowData: response.rows,
+                rowCount: response.lastRow,
+            });
+            const next = (response: VenueResponse) => getRowsParams.success(getResponse(response));
+
+            const error = () => getRowsParams.fail();
+            $venues.subscribe({ next, error });
+        };
+
+        this.gridApi.setGridOption('serverSideDatasource', { getRows });
     }
 
     public showAllColumns(): void {

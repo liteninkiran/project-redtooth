@@ -8,9 +8,39 @@ use Illuminate\Http\Request;
 
 class VenueController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Venue::all();
+        // Number of rows per page
+        $perPage = $request->input('pageSize', 20);
+
+        // Current page (ag-Grid sends 1-based page numbers)
+        $page = $request->input('startRow', 0) / $perPage + 1;
+
+        $query = Venue::query();
+
+        // Sorting based on request
+        if ($request->has('sortModel')) {
+            $sort = json_decode($request->sortModel, true);
+            foreach ($sort as $s) {
+                $query->orderBy($s['colId'], $s['sort']);
+            }
+        }
+
+        // Filtering based on request
+        if ($request->has('filterModel')) {
+            $filters = json_decode($request->filterModel, true);
+            foreach ($filters as $col => $f) {
+                // Simple example: only supports contains filter
+                $query->where($col, 'like', '%' . $f['filter'] . '%');
+            }
+        }
+
+        $venues = $query->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json([
+            'rows' => $venues->items(),
+            'lastRow' => $venues->total(),
+        ]);
     }
 
     public function show(Venue $venue)
