@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { Options, VenueService } from '../../services/venue.service';
 import { CommonModule } from '@angular/common';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -12,6 +12,8 @@ import type {
 } from 'ag-grid-community';
 import { MatButtonModule } from '@angular/material/button';
 import { VenueResponse } from '../../interfaces/venue';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 type ColumnConfig = {
     field: string;
@@ -69,12 +71,22 @@ const defaultMinWidth = 50;
 
 @Component({
     selector: 'app-venue',
-    imports: [CommonModule, AgGridAngular, MatButtonModule],
+    imports: [
+        CommonModule,
+        AgGridAngular,
+        MatButtonModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+    ],
     templateUrl: './venue.html',
     styleUrl: './venue.scss',
+    encapsulation: ViewEncapsulation.None,
 })
 export class Venue {
     private venueService = inject(VenueService);
+    public visibleColumns = visibleColumns;
     public colDefs: ColDef[] = allColumns.map(colDefMapFn);
     public sideBar = {
         toolPanels: [
@@ -145,6 +157,22 @@ export class Venue {
     }
 
     public onColumnVisible(event: any): void {
+        this.autoFitColumns();
+    }
+
+    public onColumnSelectionChange(event: any): void {
+        const selectedFields = event.value as string[];
+
+        // Show/hide columns based on dropdown selection
+        this.colDefs = this.colDefs.map((col) => ({
+            ...col,
+            hide: !selectedFields.includes(col.field ?? ''),
+        }));
+
+        // Force refresh column definitions in the grid
+        this.gridApi.setGridOption('columnDefs', this.colDefs);
+
+        // Optional: auto-fit columns afterwards
         this.autoFitColumns();
     }
 }

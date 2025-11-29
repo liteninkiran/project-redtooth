@@ -1,5 +1,19 @@
 <h1>Venues</h1>
 
+<mat-form-field appearance="outline">
+    <mat-label>Columns</mat-label>
+
+    <mat-select
+        multiple
+        [value]="visibleColumns"
+        (selectionChange)="onColumnSelectionChange($event)"
+    >
+        <mat-option *ngFor="let col of colDefs" [value]="col.field">
+            {{ col.headerName }}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
 <ag-grid-angular
     [columnDefs]="colDefs"
     [animateRows]="true"
